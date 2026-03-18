@@ -4,34 +4,14 @@
   "description": "NetOut, Explore movies, TV shows online, anime , drama series, OTT platform",
   "icons": [
     {
-      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "src": "/icons/apple-touch-icon.png",
       "type": "image/png",
-      "sizes": "16x16"
+      "sizes": "192x192"
     },
     {
-      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
-      "type": "image/png",
-      "sizes": "32x32"
-    },
-    {
-      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
-      "type": "image/png",
-      "sizes": "128x128"
-    },
-    {
-      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
-      "type": "image/png",
-      "sizes": "256x256"
-    },
-    {
-      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "src": "/icons/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "512x512"
-    },
-    {
-      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
-      "type": "image/png",
-      "sizes": "1024x1024"
     }
   ],
   "start_url": "/",
