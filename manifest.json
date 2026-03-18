@@ -1,21 +1,50 @@
 {
   "name": "NetOut",
   "short_name": "NetOut",
-  "start_url": "/",
-  "display": "fullscreen",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "orientation": "any",
+  "description": "NetOut, Explore movies, TV shows online, anime , drama series, OTT platform",
   "icons": [
     {
-      "src": "/icons/apple-touch-icon.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "16x16"
     },
     {
-      "src": "/icons/apple-touch-icon.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "https://netout.vercel.app/icons/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "edge_side_panel": {
+    "preferred_width": 800
+  },
+  "ovr_scope_extensions": [
+    {
+      "pattern": "*./"
     }
   ]
 }
