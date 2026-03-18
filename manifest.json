@@ -4,12 +4,12 @@
   "description": "NetOut, Explore movies, TV shows online, anime , drama series, OTT platform",
   "icons": [
     {
-      "src": "/icons/header-logo-mobile.png",
+      "src": "/icons/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icons/header-logo-mobile.png",
+      "src": "/icons/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "512x512"
     }
