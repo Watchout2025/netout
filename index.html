@@ -10347,6 +10347,7 @@ window.addEventListener('popstate', (event) => {
 				if (!location.pathname.toLowerCase().includes('home')) {
                    history.pushState({ page: 'home' }, '', '/home');
                 }
+				headerTitle.textContent = 'Home';
                 homeSection.classList.remove('section-hidden');
                 homeNav.classList.add('active');
 				document.getElementById("search-section").style.display = "none";
