@@ -4,6 +4,41 @@
 <head>
   <!-- Character Encoding -->
   <meta charset="UTF-8" />
+  <!-- SEO Meta Tags -->
+  <title>NetOut - Explore Movies, TV Shows, Animes & Dramas Online</title>
+  <meta name="description" content="NetOut - Explore Movies, TV Shows, Animes, and Dramas online" />
+  <meta name="keywords" content="NetOut, Explore movies, TV shows online, anime , drama series, OTT platform" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://netout.netlify.app/" />
+
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/favicon.ico" />
+  <link rel="shortcut icon" href="/icons/favicon.ico" type="image/png" />
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet" />
+
+  <!-- Open Graph Tags (for Facebook, WhatsApp, etc.) -->
+  <meta property="og:title" content="NetOut - Explore Movies, TV Shows, Animes & Dramas Online" />
+  <meta property="og:image" content="/icons/apple-touch-icon.png" />
+  <meta property="og:description" content="Explore your favorite movies, TV shows, anime, and dramas without signups on Netout." />
+  
+  <meta property="og:url" content="https://netout.netlify.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NetOut" />
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="NetOut, Explore movies, TV shows online, anime , drama series, OTT platform" />
+  <meta name="twitter:description" content="Explore your favorite movies, TV shows, anime, and dramas without signups on NetOut." />
+  <meta name="twitter:image" content="/icons/apple-touch-icon.png" />
+  <meta name="twitter:site" content="@Netout_in" />
+
+  <!-- Language -->
+  <meta http-equiv="Content-Language" content="en" />
 
   <!-- Viewport & Responsive Settings -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -11,74 +46,6 @@
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#000000">
 	
-
-<script>
-(async () => {
-  const API_URL = "https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev/?url=trending/all/week";
-  const IMAGE_BASE = "https://image.tmdb.org/t/p/w1280";
-
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-
-    const images = data.results
-      .map(item => item.poster_path)
-      .filter(Boolean);
-
-    if (!images.length) return;
-
-    const container = document.querySelector(".profile-spotlight");
-    if (!container) return;
-
-    // get or create img
-    let img = container.querySelector(".profile-spotlight-backdrop");
-    if (!img) {
-      img = document.createElement("img");
-      img.className = "profile-spotlight-backdrop";
-
-      // 🔹 EXACT styles you asked for
-      img.style.width = "100%";
-      img.style.height = "80vh";
-      img.style.objectFit = "cover";
-      img.style.aspectRatio = "16 / 9";
-
-      container.appendChild(img);
-    }
-
-    let index = 0;
-
-    function changeImage() {
-      // restart animation if any
-      img.classList.remove("zoom-effect");
-      void img.offsetWidth;
-
-      img.src = IMAGE_BASE + images[index];
-      img.classList.add("zoom-effect");
-
-      index = (index + 1) % images.length;
-    }
-
-    changeImage();
-    setInterval(changeImage, 4000);
-
-  } catch (err) {
-    console.error("Spotlight error:", err);
-  }
-})();
-</script>
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S1XCS01T14"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-S1XCS01T14');
-</script>
-
 
   <!-- Firebase SDKs -->
     <script type="module">
@@ -232,49 +199,7 @@ document.addEventListener('click', (event) => {
     history.pushState({ genre }, "", path);
   });
 });
-
-
-
-
-
-    </script>
-	
-  <!-- SEO Meta Tags -->
-  <title>NetOut - Explore Movies, TV Shows, Animes & Dramas Online</title>
-  <meta name="description" content="NetOut - Explore Movies, TV Shows, Animes, and Dramas online" />
-  <meta name="keywords" content="NetOut, Explore movies, TV shows online, anime , drama series, OTT platform" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://netout.netlify.app/" />
-
-  <!-- Favicon & Icons -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon.ico" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/icons/favicon.ico" />
-  <link rel="shortcut icon" href="/icons/favicon.ico" type="image/png" />
-
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet" />
-
-  <!-- Open Graph Tags (for Facebook, WhatsApp, etc.) -->
-  <meta property="og:title" content="NetOut - Explore Movies, TV Shows, Animes & Dramas Online" />
-  <meta property="og:image" content="/icons/apple-touch-icon.png" />
-  <meta property="og:description" content="Explore your favorite movies, TV shows, anime, and dramas without signups on Netout." />
-  
-  <meta property="og:url" content="https://netout.netlify.app/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="NetOut" />
-
-  <!-- Twitter Card Tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="NetOut, Explore movies, TV shows online, anime , drama series, OTT platform" />
-  <meta name="twitter:description" content="Explore your favorite movies, TV shows, anime, and dramas without signups on NetOut." />
-  <meta name="twitter:image" content="/icons/apple-touch-icon.png" />
-  <meta name="twitter:site" content="@Netout_in" />
-
-  <!-- Language -->
-  <meta http-equiv="Content-Language" content="en" />
-
+</script>
   
 <!-- Add your custom styles here -->
 <style>
