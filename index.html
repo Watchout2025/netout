@@ -10227,9 +10227,6 @@ window.addEventListener('popstate', (event) => {
         // Show specific section
         switch (sectionId) {
             case 'home':
-				if (!location.pathname.toLowerCase().includes('home')) {
-                   history.pushState({ page: 'home' }, '', '/home');
-                }
 				headerTitle.textContent = 'Home';
                 homeSection.classList.remove('section-hidden');
 				liveSection.style.display = "none";
