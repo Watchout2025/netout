@@ -215,77 +215,7 @@ document.addEventListener('click', (event) => {
 	#modal-play span{
 		display:none;
 	}
-	/*  music player styles */
-	.track-meta{
-	color: #fff;
-	margin-top:70px;
-    justify-content: space-between;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-	}
 
-.spotify-player img {
-    width: 100%;
-    border-radius: 16px;
-    margin-bottom: 15px;
-}
-
-.track-meta h2 {
-    margin: 0;
-    font-size: 1.2rem;
-}
-
-.track-meta p {
-    margin: 0;
-    opacity: .7;
-}
-
-.player-controls button {
-	justify-content: center;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border: none;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    font-size: 24px;
-    color: black;
-    margin: 15px 0;
-}
-
-.track-progress {
-    width: 100%;
-    appearance: none;
-    height: 4px;
-    border-radius: 10px;
-    background: #333;
-    cursor: pointer;
-}
-
-.track-progress::-webkit-slider-thumb {
-    appearance: none;
-    width: 14px;
-    height: 14px;
-    background: #1db954;
-    border-radius: 50%;
-}
-
-.track-progress::-moz-range-thumb {
-    width: 14px;
-    height: 14px;
-    background: #1db954;
-    border-radius: 50%;
-    border: none;
-}
-
-
-.progress-container input {
-	margin: 0;
-    flex: 1;
-}
 
 * Trigger button */
     .report-issue-btn {
@@ -2795,23 +2725,7 @@ h4{font-size:21px;line-height:26px}
                     </div>
                     <button class="scroll-button right" onclick="scrollRightHandler('my-list-container')">❯</button>
                 </div>
-				<!-- My List Section -->
-                <div class="carousel-section">
-                    <div class="carousel-header">
-                        <h2 class="carousel-title">Liked Songs</h2>
-                        <a href="#" class="notifications-link">
-                            <span>See All</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="notifications-link-icon">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </a>
-                    </div>
-                    <button class="scroll-button left" onclick="scrollLeftHandler('liked-songs-container')">❮</button>
-                    <div class="carousel-content no-scrollbar" id="liked-songs-container">
-                        <!-- my-List card goes here-->
-                    </div>
-                    <button class="scroll-button right" onclick="scrollRightHandler('liked-songs-container')">❯</button>
-                </div>
+			<!-- Liked Songs Section Removed -->
             </section>     
         </main>
     </div>
@@ -3206,13 +3120,7 @@ body{background: Black;}
 		}
 		.previewModal-audioToggle{
     pointer-events: none;}
-		.widget-player{
-	width:100% !important;
-	bottom: 0 !important;
-	right:0 !important;
-	left:0 !important;
-	border-radius: 2px !important;
-		}
+
 		.curved-bg,.profile-spotlight{
 			display:none;
 		}
@@ -3615,36 +3523,6 @@ const clearBtn = document.getElementById('search-clear');
 const homeSection = document.getElementById('home-section');
 const searchSection = document.getElementById('search-section');
 
-async function fetchSaavnResults(query, signal) {
-    if (!query || query.length < 2) return [];
-
-    try {
-        const res = await fetch(
-            `https://saavn-api-jet.vercel.app/api/search/songs?query=${encodeURIComponent(query)}`,
-            { signal }   // ✅ required for abort to work
-        );
-        if (!res.ok) return [];
-
-        const json = await res.json();
-        const items = json?.data?.results || json || [];
-
-        return items.map(item => ({
-            id: item.id || item.song_id,
-            title: item.name || item.song_name,
-            name: item.name || item.song_name,
-            image: item.image?.[2]?.url || item.song_image || '',
-            year: item.year || '',
-            artist: item.artists?.primary?.map(a => a.name).join(', ') || item.song_artist || '',
-            media_type: 'track'
-        }));
-    } 
-	catch (err) {
-    if (err.name === 'AbortError') return [];
-    console.error('Saavn search failed:', err);
-    return [];
-    }
-}
-
 
 async function fetchLiveChannels(query, signal) {
     if (!query || query.length < 2) return [];
@@ -3765,8 +3643,6 @@ function displayMobileResults(results, searchTerm) {
         const posterSrc =
     type === 'live'
         ? (item.logo || 'https://via.placeholder.com/45x68?text=LIVE')
-        : type === 'track'
-        ? (item.image || 'https://via.placeholder.com/45x68?text=MUSIC')
         : (item.poster_path ? imgBase + item.poster_path : 'https://via.placeholder.com/45x68?text=No+Image');
 
 
@@ -3777,7 +3653,7 @@ function displayMobileResults(results, searchTerm) {
                 <div class="tmdb-result-meta">
                     ${releaseYear ? `<span class="tmdb-result-year">${releaseYear}</span>` : ''}
                     <span class="tmdb-result-type">
-  ${type === 'live' ? 'Channel' : type === 'movie' ? 'Movie' : type === 'tv' ? 'TV' : 'Music'}
+  ${type === 'live' ? 'Channel' : type === 'movie' ? 'Movie' : 'TV'}
 </span>
 
                 </div>
@@ -3787,10 +3663,6 @@ function displayMobileResults(results, searchTerm) {
         div.onclick = () => {
             if (type === 'live') {
     openModal(item.id, 'channel');
-} else if (type === 'track') {
-	updateQueue(item.id);
-    openModal(item.id, 'track');
-	
 } else {
     openModal(item.id, type);
 }
@@ -3849,8 +3721,6 @@ function displayDesktopResults(results, searchTerm) {
         const posterSrc =
             type === 'live'
                 ? (item.logo || 'https://via.placeholder.com/200x300?text=LIVE')
-                : type === 'track'
-                ? (item.image || 'https://via.placeholder.com/200x300?text=MUSIC')
                 : (item.poster_path ? imgBase + item.poster_path : 'https://via.placeholder.com/200x300?text=No+Image');
 
         itemDiv.innerHTML = `
@@ -3875,9 +3745,6 @@ function displayDesktopResults(results, searchTerm) {
         itemDiv.onclick = () => {
             if (type === 'live') {
     openModal(item.id, 'channel');
-} else if (type === 'track') {
-	updateQueue(item.id);
-    openModal(item.id, 'track');
 } else {
     openModal(item.id, type);
 }
@@ -4035,12 +3902,7 @@ const debouncedSearch = debounce(async (query) => {
         }
     });
 
-    // 3. Saavn (slowest)
-    fetchSaavnResults(query, signal).then(saavnResults => {
-        if (signal.aborted) return;
-        aggregated.push(...saavnResults);
-        displayResults(aggregated, query);
-    });
+    // 3. Saavn music search removed
 
 } catch (err) {
         // Ignore aborted requests
@@ -6299,43 +6161,7 @@ searchInputBar.addEventListener("input", () => {
 
         window.onload = initEPG;
     </script>
-<!-- STANDALONE SPOTIFY PLAYER WIDGET -->
-<div id="widget-player" class="widget-player" style=" display:none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; position: fixed; bottom: 60px; left: 8px; right: 8px; width: calc(100% - 16px); height: 56px; background-color: #282828; border-radius: 8px; align-items: center; justify-content: space-between; padding: 0 12px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.5); user-select: none; z-index: 9999; box-sizing: border-box;">
-    
-    <!-- Track Details -->
-    <div style="display: flex; align-items: center; gap: 10px; overflow: hidden; flex: 1;">
-        <img id="widget-album-art" class="widget-album-art" 
-             src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=500" 
-             style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover; flex-shrink: 0;" 
-             alt="Album Art">
-        <div style="display: flex; flex-direction: column; overflow: hidden; line-height: 1.4;">
-            <span id="widget-track-title" class="widget-track-title"style="color: #ffffff; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.2px;">Blinding Lights</span>
-            <span id="widget-track-artist" class="widget-track-artist"style="color: #b3b3b3; font-size: 12px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">The Weeknd</span>
-        </div>
-    </div>
-
-    <!-- Right Side Controls -->
-    <div style="display: flex; align-items: center; gap: 16px; padding-left: 8px;">
-        <!-- Connect to device icon (Spotify Green) -->
-        <button style="background: none; border: none; padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; outline: none;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 3h20v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3Z" stroke-width="1.5"></path>
-                <path d="M8 21h8" stroke-width="1.5"></path>
-                <path d="M12 17v4" stroke-width="1.5"></path>
-            </svg>
-        </button>
-        
-        <!-- Play/Pause Toggle -->
-        <button id="widget-play-button" style="fill: white; background: none; border: none; padding: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; outline: none;">
-
-        </button>
-    </div>
-
-    <!-- Progress bar at the very bottom -->
-    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background-color: rgba(255,255,255,0.1);">
-        <div id="bar-widget" style="height: 100%; background-color: #ffffff; width: 35%; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);"></div>
-    </div>
-</div>
+<!-- STANDALONE SPOTIFY PLAYER WIDGET REMOVED -->
 	  
 <div class="report-modal" id="reportModal">
     <div class="report-modal-box">
@@ -6398,73 +6224,7 @@ searchInputBar.addEventListener("input", () => {
        </section>	
 		
 		
-		<section id="music-section" class="music-section" style="background:black; display:none;">
-			<div class="spotify-player" style="padding: 0 30px;margin: 0 auto;max-width: 360px;margin-top: 70px;text-align: center;">
-            <img class="track-cover">
-            
-            <div class="track-meta">
-                <div style="color: #fff;justify-content: left;display: flex;flex-direction: column;align-items: flex-start;margin-bottom: 10px;">
-                   <h2 class="track-title"></h2>
-                   <p class="track-artist"></p>
-                </div>
-                <button class="like-btn" style="display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: none; border: none; cursor: pointer; padding: 0; outline: none;">
-                    <svg class="like-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10.5" stroke="#ffffff" stroke-width="2.5"/>
-                        <path d="M12 7.5V16.5M7.5 12H16.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-                    </svg>
-                </button>
-             </div>
-
-            <div class="progress-container" style="color:#fff;align-items: center;gap: 5px;font-size: 12px;">
-                <input type="range" class="track-progress" value="0" min="0" max="100">
-	            <div style="display:flex; flex-direction:row; width:100%; justify-content:space-between; margin-top:2px; align-items:center;">
-				  <span class="track-current-time">0:00</span>
-                  <span class="track-duration">0:00</span>
-                </div>
-            </div>
-
-            <div class="player-controls" style="display: flex; align-items: center; justify-content: center; gap: 24px; background: #000; padding: 40px; padding-top:0px;">
-                <button id="prev-track" style="display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: none; border: none; cursor: pointer; outline: none; padding: 0;">
-                    <svg width="35" height="35" viewBox="0 0 24 24" fill="#ffffff">
-                        <path d="M18 5.5v13L7 12l11-6.5zM6 5a1 1 0 0 0-1 1v12a1 1 0 1 0 2 0V6a1 1 0 0 0-1-1z"/>
-                    </svg>
-                </button>
-                <button class="track-play-btn"><svg data-encore-id="icon" role="img" aria-hidden="true" class="e-91000-icon e-91000-baseline" viewBox="0 0 16 16" style="display: flex;height: 24px;justify-content: center;"><path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288z"></path></svg></button>
-                <!-- Next Button (Size: 35) -->
-    <button id="next-track" style="display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: none; border: none; cursor: pointer; outline: none; padding: 0;">
-        <svg width="35" height="35" viewBox="0 0 24 24" fill="#ffffff">
-            <!-- Triangle pointing right, meeting the bar at x=18 -->
-            <path d="M6 5.5v13l11-6.5L6 5.5zM18 5a1 1 0 0 1 1 1v12a1 1 0 1 1-2 0V6a1 1 0 0 1 1-1z"/>
-        </svg>
-    </button>
-            </div>
-			<!-- Secondary Actions Row (Floating Right) -->
-    <div class="secondary-actions" style="display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-bottom: 12px; padding-right: 4px;">
-        <!-- Share Button (Google Material Style) -->
-        <button id="music-share-button" title="Share" style="background: none; border: none; cursor: pointer; padding: 0; outline: none;">
-            <svg width="22" height="22" viewBox="0 -960 960 960" fill="#fff">
-                <path d="M720-80q-50 0-85-35t-35-85q0-7 1-14.5t3-13.5L322-392q-17 15-38 23.5t-44 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q23 0 44 8.5t38 23.5l282-164q-2-6-3-13.5t-1-14.5q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-23 0-44-8.5t-38-23.5L354-480l282 164q17-15 38-23.5t44-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Z"/>
-            </svg>
-        </button>
-        <!-- Queue Button -->
-        <button id="music-queue-button" title="Queue" style="background: none; border: none; cursor: pointer; padding: 0; outline: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"></path></svg>
-        </button>
-    </div>
-
-            <!-- About Artist Section -->
-            <div class="about-artist" style="background: #121212; display: flex; flex-direction: column; margin-bottom: 20px; border-radius: 8px; color: #fff; position: relative; overflow: hidden;">
-                <h3 style="position: absolute; z-index: 1; margin-left: 15px; margin-top: 15px; font-size: 16px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">About the artist</h3>
-                <div style="position: relative; width: 100%; aspect-ratio: 2 / 1.2; overflow: hidden; margin-bottom: 16px;">
-                    <img class="artist-img" style="border-radius:0px; width: 100%; height: 100%; object-fit: cover;">
-                </div>
-                <h4 class="artist-name" style="margin-left: 15px; text-align: left; font-size: 20px; font-weight: 700; margin-top: 0;"></h4>
-                <p style="margin-left: 15px; margin-bottom: 20px; text-align: left; color: #b3b3b3; font-size: 14px; margin-top: 4px;">Primary Artist</p>
-            </div>
-
-            <audio class="track-audio"></audio>
-        </div>
-		</section>
+<!-- MUSIC SECTION REMOVED -->
 	  
         
       
@@ -7430,27 +7190,6 @@ async function getMovieStreamingAndDownloadLink(movieItem, movieReleaseYear) {
     source: sourceUsed
   };
 }
-function updateQueue(id) {
-  let q = JSON.parse(localStorage.getItem('trackQueue')) || [];
-
-  // remove if already exists
-  q = q.filter(x => x !== id);
-
-  // add to front
-  q.unshift(id);
-
-  // limit to 10
-  if (q.length > 10) q = q.slice(0, 10);
-
-  // persist
-  localStorage.setItem('trackQueue', JSON.stringify(q));
-  localStorage.setItem('currentTrackIndex', 0);
-
-  // runtime state
-  window.trackQueue = q;
-  window.currentTrackIndex = 0;
-}
-
 
 // openModal Script
 async function openModal(id, mediaType) {
@@ -7458,7 +7197,6 @@ async function openModal(id, mediaType) {
 	const text = document.getElementById("top-10-text");
     const modal = document.getElementById('tmdb-modal');
 	const modalSection = document.getElementById('modal-content');
-	const musicSection = document.getElementById('music-section');
     const overlay = document.getElementById('overlay');
     const playerWrap = document.getElementById('playerWrap');
     const iframeContainer = document.getElementById('iframe-holder');
@@ -7481,7 +7219,6 @@ async function openModal(id, mediaType) {
     const downloadBtn = document.getElementById('modal-download');
     const episodeTab = document.getElementById('episode-tab');
 	const channelSection = document.getElementById('channel-content');
-	const widgetPlayer = document.getElementById('widget-player');
     const isDesktop = window.innerWidth >= 1024;
     const spinnerHTML = `
                     <div class="loading-spinner-container">
@@ -7664,7 +7401,6 @@ fill="currentColor"></path>
 	if (mediaType === 'channel') {
     channelSection.style.display = 'block';
     modalSection.style.display = 'none';
-	musicSection.style.display = 'none';
 	
     const tvPlayerDiv = document.getElementById('tv-player-div');
 
@@ -7732,261 +7468,11 @@ fill="currentColor"></path>
             if (container) container.innerHTML = '<p style="color: #ff5555;">Program info could not be loaded.</p>';
         });
 }
-	// if track
-else if (mediaType === 'track') {
-	const currentTrackId = musicSection.dataset.playingId;
-    musicSection.style.display = 'block';
-	widgetPlayer.style.display = 'flex';
-    modalSection.style.display = 'none';
-    channelSection.style.display = 'none';
-	
-	// 2. If it's the SAME track, don't re-render or re-fetch
-    if (currentTrackId === id) {
-        return; // Exit function, music keeps playing
-    }
-    // 3. If it's a NEW track, update the ID and proceed with the render
-    musicSection.dataset.playingId = id;
-
-    const audio = musicSection.querySelector('.track-audio');
-	if ('mediaSession' in navigator) {
-  navigator.mediaSession.setActionHandler('play', () => {
-    audio.play();
-  });
-
-  navigator.mediaSession.setActionHandler('pause', () => {
-    audio.pause();
-  });
-
-  navigator.mediaSession.setActionHandler('previoustrack', () => {
-    const prevId = trackQueue[currentTrackIndex - 1];
-    if (prevId) {
-      currentTrackIndex--;
-      localStorage.setItem('currentTrackIndex', currentTrackIndex);
-      openModal(prevId, 'track');
-    }
-  });
-
-  navigator.mediaSession.setActionHandler('nexttrack', () => {
-    const nextId = trackQueue[currentTrackIndex + 1];
-    if (nextId) {
-      currentTrackIndex++;
-      localStorage.setItem('currentTrackIndex', currentTrackIndex);
-      openModal(nextId, 'track');
-    }
-  });
-}
-
-    const playButton = musicSection.querySelector('.track-play-btn');
-    const progress = musicSection.querySelector('.track-progress');
-    const currentTimeEl = musicSection.querySelector('.track-current-time');
-    const durationEl = musicSection.querySelector('.track-duration');
-    const likeButton = musicSection.querySelector('.like-btn');
-	const ICON_PLAY = `
-<svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 16 16" style="height:24px">
-  <path d="M3 1.713a.7.7 0 0 1 1.05-.607l10.89 6.288a.7.7 0 0 1 0 1.212L4.05 14.894A.7.7 0 0 1 3 14.288z"></path>
-</svg>`;
-
-const ICON_PAUSE = `
-<svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 16 16" style="height:24px">
-  <path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7z"></path>
-</svg>`;
-
-
-    fetch(`https://saavn.sumit.co/api/songs/${id}`)
-        .then(res => res.json())
-        .then(data => {
-            const t = data.data[0];
-            const trackId = t.id;
-            const imgSrc = t.image[2].url;
-			if ('mediaSession' in navigator) {
-			  navigator.mediaSession.metadata = new MediaMetadata({
-			    title: t.name,
-			    artist: t.artists.primary.map(a => a.name).join(', '),
-			    album: t.album?.name || 'WatchOut',
-			    artwork: [
-			      { src: t.image[2].url, sizes: '300x300', type: 'image/png' }
-			    ]
-			  });
-			}
-
-            widgetPlayer.onclick = () => openModal(trackId, 'track');
-            audio.src = t.downloadUrl[4].url;
-            audio.play();
-            playButton.innerHTML = `<svg data-encore-id="icon" role="img" aria-hidden="true" class="e-91000-icon e-91000-baseline" viewBox="0 0 16 16" style="display: flex;height: 24px;justify-content: center;"><path d="M2.7 1a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7zm8 0a.7.7 0 0 0-.7.7v12.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V1.7a.7.7 0 0 0-.7-.7z"></path></svg>`;
-            
-            musicSection.querySelector('.track-cover').src = imgSrc;
-			widgetPlayer.querySelector('.widget-album-art').src = imgSrc;
-            musicSection.querySelector('.track-title').innerText = t.name;
-			widgetPlayer.querySelector('.widget-track-title').innerText = t.name;
-            musicSection.querySelector('.track-artist').innerText = t.artists.primary.map(a => a.name).join(', ');
-	        widgetPlayer.querySelector('.widget-track-artist').innerText = t.artists.primary.map(a => a.name).join(', ');
-
-            // Initial check if song is already liked
-            updateLikeUI(trackId);
-
-            // Liked Song Functionality
-            likeButton.onclick = () => {
-                likeSong(trackId, imgSrc);
-            };
-
-            function likeSong(id, img) {
-                let likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
-                const index = likedSongs.findIndex(s => s.id === id);
-
-                if (index === -1) {
-                    // Add to liked
-                    likedSongs.push({ id: id, img: img });
-                } else {
-                    // Remove if already liked (toggle behavior)
-                    likedSongs.splice(index, 1);
-                }
-
-                localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
-                updateLikeUI(id);
-            }
-
-            function updateLikeUI(id) {
-                const likedSongs = JSON.parse(localStorage.getItem('likedSongs')) || [];
-                const isLiked = likedSongs.some(s => s.id === id);
-                const svg = likeButton.querySelector('.like-icon');
-                
-                if (isLiked) {
-                    // Change to filled green circle or similar to indicate "Saved"
-                    svg.innerHTML = `
-                        <circle cx="12" cy="12" r="10.5" fill="#1db954" stroke="#1db954" stroke-width="2.5"/>
-                        <path d="M7.5 12L10.5 15L16.5 9" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    `;
-                } else {
-                    // Back to plus icon
-                    svg.innerHTML = `
-                        <circle cx="12" cy="12" r="10.5" stroke="#ffffff" stroke-width="2.5"/>
-                        <path d="M12 7.5V16.5M7.5 12H16.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
-                    `;
-                }
-            }
-
-            // Populate About Artist details
-            const primaryArtist = t.artists.primary[0];
-            if (primaryArtist) {
-                musicSection.querySelector('.artist-img').src = primaryArtist.image[2]?.url || t.image[2].url;
-                musicSection.querySelector('.artist-name').innerText = primaryArtist.name;
-            }
-			function updatePlayUI() {
-			    const icon = audio.paused ? ICON_PLAY : ICON_PAUSE;
-			    playButton.innerHTML = icon;
-
- 			   const widgetBtn = document.getElementById('widget-play-button');
- 			   if (widgetBtn) widgetBtn.innerHTML = icon;
-			}
-
-
-
-            audio.addEventListener('play', updatePlayUI);
-			audio.addEventListener('pause', updatePlayUI);
-			audio.addEventListener('ended', updatePlayUI);
-
-			playButton.onclick = () => {
-			    audio.paused ? audio.play() : audio.pause();
-			};
-            const widgetBtn = document.getElementById('widget-play-button');
-			if (widgetBtn) {
-			    widgetBtn.onclick = (e) => {
- 			       e.stopPropagation();   // prevent widget from opening modal
-			        audio.paused ? audio.play() : audio.pause();
-			    };
-			}
-
-
-
-            audio.addEventListener('timeupdate', () => {
-                if (!isNaN(audio.duration)) {
-                    const progressPercent = (audio.currentTime / audio.duration) * 100;
-        
-                    // 1. Update main player slider
-                    progress.value = progressPercent;
-                    currentTimeEl.innerText = format(audio.currentTime);
-                    updateProgressUI(progress);
-
-                    // 2. Update widget progress bar width
-                    const widgetBar = document.getElementById('bar-widget');
-                    if (widgetBar) {
-                        widgetBar.style.width = `${progressPercent}%`;
-                    }
-                }
-            });
-
-            audio.addEventListener('loadedmetadata', () => {
-                durationEl.innerText = format(audio.duration);
-            });
-
-            progress.addEventListener('input', () => {
-                audio.currentTime = (progress.value / 100) * audio.duration;
-                updateProgressUI(progress);
-            });
-			// Next button
-			document.getElementById('next-track').onclick = () => {
-			  const nextId = trackQueue[currentTrackIndex + 1];
-			  if (nextId) {
-			    currentTrackIndex++;
-			    localStorage.setItem('currentTrackIndex', currentTrackIndex);
-			    openModal(nextId, 'track');
-			  }
-			};
-	        //Prev button
-			document.getElementById('prev-track').onclick = () => {
-			  const prevId = trackQueue[currentTrackIndex - 1];
-			  if (prevId) {
-			    currentTrackIndex--;
-			    localStorage.setItem('currentTrackIndex', currentTrackIndex);
-			    openModal(prevId, 'track');
- 			 }
-			};
-
-
-	
-			audio.addEventListener('ended', () => {
-			  if (!trackQueue.length) return;
-
- 			 const nextIndex = currentTrackIndex + 1;
- 			 const nextId = trackQueue[nextIndex];
-
- 			 if (nextId) {
-  			  currentTrackIndex = nextIndex;
-  			  localStorage.setItem('currentTrackIndex', currentTrackIndex);
-  			  openModal(nextId, 'track');
- 			 }
- 			 // else: queue finished → player stops (correct UX)
-			});
-
-
-
-            function format(sec) {
-                const m = Math.floor(sec / 60);
-                const s = Math.floor(sec % 60);
-                return `${m}:${s.toString().padStart(2,'0')}`;
-            }
-
-            function updateProgressUI(el) {
-                el.style.background = `linear-gradient(
-                    to right,
-                    #1db954 0%,
-                    #1db954 ${el.value}%,
-                    #333 ${el.value}%,
-                    #333 100%
-                )`;
-            }
-        });
-}
-
-
-
-    else {
+	else {
         modalSection.style.display = 'block';
         channelSection.style.display = 'none';
-		musicSection.style.display = 'none';
     }
 	if (mediaType === 'person') {
-		    musicSection.style.display = 'none';
             modalSection.style.display = 'none';
             channelSection.style.display = 'none';
 		    document.getElementById('actor-section').style.display = "block";
@@ -9335,50 +8821,8 @@ function displayMyList() {
         myListContainer.appendChild(card);
     });
 }
-function displayLikedSongs() {
-    const likedSongsContainer = document.getElementById('liked-songs-container');
-    if (!likedSongsContainer) {
-        console.error('liked-songs-container element not found in the DOM');
-        return;
-    }
-
-    // Clear existing content
-    likedSongsContainer.innerHTML = '';
-
-    // Get myList from localStorage
-    const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
-
-    if (likedSongs.length === 0) {
-        likedSongsContainer.innerHTML = '<p style="color: white; padding: 10px;">Your list is empty.</p>';
-        return;
-    }
-
-    // Create a card for each item
-    likedSongs.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'movie-card';
-        
-        // Create poster image
-        const img = document.createElement('img');
-        img.src = item.img || 'https://placehold.co/150x225/cccccc/333333?text=No+Image';
-        // Add click event to open modal
-        card.onclick = () => {
-          updateQueue(item.id);
-          openModal(item.id, 'track');
-        };
-        // Append image to card
-        card.appendChild(img);
-        // Append card to container
-        likedSongsContainer.appendChild(card);
-    });
-}
-
-
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', displayMyList);
-document.addEventListener('DOMContentLoaded', displayLikedSongs);
-window.trackQueue = JSON.parse(localStorage.getItem('trackQueue')) || [];
-window.currentTrackIndex = Number(localStorage.getItem('currentTrackIndex')) || 0;
 </script>
 <!------------------------------------------------------------------------- Update Metatag Script ------------------------------------------------------------------------------------------>
   
@@ -10585,14 +10029,6 @@ function checkUrlAndOpenModal(isInitialLoad = false) {
     return;
   }
 
-  const trId = urlParams.get('track');
-  if (trId) {
-    if (isInitialLoad) {
-      history.replaceState({ page: "browse" }, "", "/browse");
-    }
-    openModal(trId, 'track');
-    return;
-  }
 }
   
   // Handle browser back/forward navigation
