@@ -7129,14 +7129,14 @@ async function getMovieStreamingAndDownloadLink(movieItem, movieReleaseYear) {
 
       if (fileCode) {
         // Build full playable link
-        currentPlayLink = `watchout-player.netlify.app/?url=https://hlsproxy.bingeoutofficial.workers.dev/proxy/${encodeURIComponent(fileCode)}`;
+        currentPlayLink = `${fileCode}`;
         isHlsWorkerLink = true;
         sourceUsed = "GitHub";
         console.log(`✅ Found GitHub HLS code for "${movieTitle}": ${fileCode}`);
         console.log(`➡️ Final GitHub Play Link: ${currentPlayLink}`);
       } else if (fileCode.startsWith("http")) {
   // Wrap direct m3u8 in your player
-  currentPlayLink = `watchout-player.netlify.app/?url=https://hlsproxy.bingeoutofficial.workers.dev/proxy/${encodeURIComponent(fileCode)}`;
+  currentPlayLink = `${encodeURIComponent(fileCode)}`;
   isHlsWorkerLink = true;
   sourceUsed = "GitHub";
 }
@@ -8526,7 +8526,7 @@ try {
             let directHlsLink;
 
             // ✅ If fileId ends with m3u8, use it directly
-            if (fileId.endsWith(".m3u8") || fileId.endsWith(".txt")) {
+            if (fileId.endsWith(".m3u8")) {
                 directHlsLink = fileId;
 				episodeUrl = `https://watchout-player.netlify.app/?url=${encodeURIComponent(directHlsLink)}`;
             } else {
