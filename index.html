@@ -10024,6 +10024,14 @@ function checkUrlAndOpenModal(isInitialLoad = false) {
     return;
   }
 
+  const trId = urlParams.get('track');
+  if (trId) {
+    if (isInitialLoad) {
+      history.replaceState({ page: "browse" }, "", "/browse");
+    }
+    openModal(trId, 'track');
+    return;
+  }
 }
   
   // Handle browser back/forward navigation
