@@ -9731,7 +9731,7 @@ window.addEventListener('popstate', (event) => {
 	
 function home() {
       if (!location.pathname.toLowerCase().includes('home')) {
-         history.pushState({ page: 'home' }, '', '/home');
+         history.back();
          }      
 }
 </script>
