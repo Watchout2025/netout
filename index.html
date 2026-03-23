@@ -10051,24 +10051,8 @@ function checkUrlAndOpenModal(isInitialLoad = false) {
 
 });
   
-  // Override the fetchEpisodes function to update URL when season changes
-  const originalFetchEpisodes = window.fetchEpisodes;
-  window.fetchEpisodes = function(seriesId, seasonNumber, seriesName) {
-    // Update URL to include season when manually changing seasons (using Capital S format)
-    const currentPath = window.location.pathname;
-    const tvMatch = currentPath.match(/\/tv\/(\d+)/);
-    
-    if (tvMatch) {
-      const newUrl = `/tv/${seriesId}/S${seasonNumber}`;
-      history.pushState({seriesId, seasonNumber}, '', newUrl);
-    }
-    
-    // Call the original fetchEpisodes function
-    return originalFetchEpisodes(seriesId, seasonNumber, seriesName);
-  };
-  
-  // Check URL on initial page load
-  checkUrlAndOpenModal(true);
+// Check URL on initial page load
+checkUrlAndOpenModal(true);
 });
 
 function handleRoute() {
