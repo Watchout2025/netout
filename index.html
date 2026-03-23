@@ -7136,7 +7136,7 @@ async function getMovieStreamingAndDownloadLink(movieItem, movieReleaseYear) {
         console.log(`➡️ Final GitHub Play Link: ${currentPlayLink}`);
       } else if (fileCode.startsWith("http")) {
   // Wrap direct m3u8 in your player
-  currentPlayLink = `${encodeURIComponent(fileCode)}`;
+  currentPlayLink = `https://hlsproxy.bingeoutofficial.workers.dev/proxy/${encodeURIComponent(fileCode)}`;
   isHlsWorkerLink = true;
   sourceUsed = "GitHub";
 }
