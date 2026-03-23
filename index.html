@@ -9544,7 +9544,7 @@ function injectJSONLD(data, type = 'movie') {
 <!-- HTML STRUCTURE - Add this anywhere in your <body> section (preferably at the end) -->
         <nav class="netflix-nav">
             <div class="nav-container">
-                <div id="home-nav" class="nav-item active" data-page="home">
+                <div id="home-nav" onclick="home()" class="nav-item active" data-page="home">
                     <div class="nav-icon">
                         <div class="home-icon"></div>
                     </div>
@@ -9728,6 +9728,12 @@ window.addEventListener('popstate', (event) => {
         // Initially show the 'Home' section
         //showSection('home');
     });
+	
+function home() {
+      if (!location.pathname.toLowerCase().includes('home')) {
+         history.pushState({ page: 'home' }, '', '/home');
+         }      
+}
 </script>
 
 
