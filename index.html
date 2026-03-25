@@ -6665,7 +6665,7 @@ function renderMovieSections(genre) {
     window.scrollTo(0, 0);
 }
 function renderLiveSections() {
-    navigateTo('/Live')
+    navigateTo('/Live');
     document.getElementById("home-section").classList.add("section-hidden");
 	document.getElementById("my-netflix-section").classList.add("section-hidden");
 	const liveSection = document.getElementById('live-section');
@@ -6674,7 +6674,7 @@ function renderLiveSections() {
 }
   
 function renderMyListSections() {
-    navigateTo('/My-List')
+    navigateTo('/My-List');
     showSection('my-netflix');
     window.scrollTo(0, 0);
     const subheader = document.querySelector(".sub-header")
@@ -9696,9 +9696,7 @@ window.addEventListener('popstate', (event) => {
                 break;
 
             case 'my-netflix':
-				if (!location.pathname.toLowerCase().includes('my-list')) {
-                   history.pushState({ page: 'my-netflix' }, '', '/My-List');
-                }
+				navigateTo('/My-List')
                 myNetflixSection.classList.remove('section-hidden');
                 myNetflixNav.classList.add('active');
                 headerTitle.textContent = 'My WatchOut';
