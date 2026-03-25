@@ -6399,23 +6399,14 @@ async function renderCollection(sectionId, jsonUrl, heading) {
 
   section.innerHTML = `
     <h2>${heading}</h2>
-    <div id="${sectionId}-Container" class="cards-container"></div>
+    <div id="${sectionId}-Wrapper" style="position:relative;">
+      <button class="scroll-button left" onclick="scrollLeftHandler('${sectionId}-Container')">❮</button>
+      <div id="${sectionId}-Container" class="cards-container"></div>
+      <button class="scroll-button right" onclick="scrollRightHandler('${sectionId}-Container')">❯</button>
+    </div>
   `;
 
   const container = document.getElementById(`${sectionId}-Container`);
-
-  const scrollLeftBtn = document.createElement('button');
-  scrollLeftBtn.className = 'scroll-button left';
-  scrollLeftBtn.innerText = '❮';
-  scrollLeftBtn.onclick = () => scrollLeftHandler(`${sectionId}-Container`);
-
-  const scrollRightBtn = document.createElement('button');
-  scrollRightBtn.className = 'scroll-button right';
-  scrollRightBtn.innerText = '❯';
-  scrollRightBtn.onclick = () => scrollRightHandler(`${sectionId}-Container`);
-
-  section.appendChild(scrollLeftBtn);
-  section.appendChild(scrollRightBtn);
 
   try {
     const response = await fetch(jsonUrl);
@@ -6463,24 +6454,14 @@ async function renderChannels(sectionId, jsonUrl, heading) {
 
   section.innerHTML = `
     <h2>${heading}</h2>
-    <div id="${sectionId}-Container" class="cards-container"></div>
+    <div id="${sectionId}-Wrapper" style="position:relative;">
+      <button class="scroll-button left" onclick="scrollLeftHandler('${sectionId}-Container')">❮</button>
+      <div id="${sectionId}-Container" class="cards-container"></div>
+      <button class="scroll-button right" onclick="scrollRightHandler('${sectionId}-Container')">❯</button>
+    </div>
   `;
 
   const container = document.getElementById(`${sectionId}-Container`);
-
-  // Scroll Buttons
-  const scrollLeftBtn = document.createElement('button');
-  scrollLeftBtn.className = 'scroll-button left';
-  scrollLeftBtn.innerText = '❮';
-  scrollLeftBtn.onclick = () => scrollLeftHandler(`${sectionId}-Container`);
-
-  const scrollRightBtn = document.createElement('button');
-  scrollRightBtn.className = 'scroll-button right';
-  scrollRightBtn.innerText = '❯';
-  scrollRightBtn.onclick = () => scrollRightHandler(`${sectionId}-Container`);
-
-  section.appendChild(scrollLeftBtn);
-  section.appendChild(scrollRightBtn);
 
   try {
     const response = await fetch(jsonUrl);
