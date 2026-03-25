@@ -10071,12 +10071,7 @@ function handleRoute() {
 }
 	
 function navigateTo(path) {
-    // Close modal if navigating away from a detail view
-    const params = new URLSearchParams(window.location.search);
-    if (!params.has('movie') && !params.has('tv') && !params.has('channel')) {
-        closeModal();
-    }
-
+    closeModal();
     // Only push if it's not already the same path
     if (location.pathname.toLowerCase() !== path.toLowerCase()) {
         history.pushState({}, "", path);
