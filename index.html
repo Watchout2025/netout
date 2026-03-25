@@ -9725,9 +9725,9 @@ window.addEventListener('popstate', (event) => {
     });
 	
 function home() {
-      if (!location.pathname.toLowerCase().includes('home')) {
-         history.back();
-         }      
+  if (location.pathname.toLowerCase() !== '/home' || location.search.length > 0) {
+    navigateTo('/home');
+  }
 }
 </script>
 
