@@ -8080,6 +8080,7 @@ if (item.recommendations && item.recommendations.results && item.recommendations
                 e.preventDefault();
                 modal.dataset.currentBackdrop = document.getElementById('modal-backdrop')?.src || '';
                 modal.dataset.currentMovieId = item.id;
+				history.pushState({}, '', `/watch/movie/${item.id}`);
 
                 const { playLink, isHlsWorkerLink, source } = await getMovieStreamingAndDownloadLink(item, releaseYear);
 
