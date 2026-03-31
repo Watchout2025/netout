@@ -8689,6 +8689,7 @@ function closeModal() {
 function playerClose() {
   const iframeholder = document.getElementById('iframe-holder');
   iframeholder.style.display = 'none';
+  history.back();
   iframeholder.innerHTML = ``;
   displayContinueWatching();
 }
