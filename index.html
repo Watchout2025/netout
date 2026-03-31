@@ -8411,7 +8411,8 @@ async function playEpisode(seriesName, seasonNumber, episodeNumber, seriesId, un
     const iframeHolder = document.getElementById('iframe-holder');
     const playingId = `tv_${seriesId}_${seasonNumber}_${episodeNumber}`;
     modal.scrollTop = 0;
-	// destroy YouTube trailer player
+    
+    // destroy YouTube trailer player
     player?.destroy();
     player = null;
 
@@ -8452,73 +8453,75 @@ async function playEpisode(seriesName, seasonNumber, episodeNumber, seriesId, un
     }
 
     let episodeUrl = null;
-let isHlsWorkerLink = false;
+    let isHlsWorkerLink = false;
+    let isGitHubSource = false; // Flag to track GitHub source
 
-const formattedSeason = seasonNumber < 10 ? `s0${seasonNumber}` : `s${seasonNumber}`;
-const formattedEpisode = episodeNumber < 10 ? `e0${episodeNumber}` : `e${episodeNumber}`;
+    const formattedSeason = seasonNumber < 10 ? `s0${seasonNumber}` : `s${seasonNumber}`;
+    const formattedEpisode = episodeNumber < 10 ? `e0${episodeNumber}` : `e${episodeNumber}`;
 
-if (seriesName && seasonNumber !== undefined && episodeNumber !== undefined) {
-    const formattedSeriesTitle = formatTitleForHls(seriesName);
-    const dottedTitle = `${formattedSeriesTitle}.${formattedSeason}${formattedEpisode}`;
+    if (seriesName && seasonNumber !== undefined && episodeNumber !== undefined) {
+        const formattedSeriesTitle = formatTitleForHls(seriesName);
+        const dottedTitle = `${formattedSeriesTitle}.${formattedSeason}${formattedEpisode}`;
 
-    // ---------------------------------------
-// 🆕 1️⃣ Try GitHub Direct HLS Link First
-// ---------------------------------------
-const githubJsonUrl = `https://raw.githubusercontent.com/Watchout2025/api/refs/heads/main/hls/tv/${seriesId}/S${seasonNumber}.json`;
+        // ---------------------------------------
+        // 🆕 1️⃣ Try GitHub Direct HLS Link First
+        // ---------------------------------------
+        const githubJsonUrl = `https://raw.githubusercontent.com/Watchout2025/api/refs/heads/main/hls/tv/${seriesId}/S${seasonNumber}.json`;
 
-try {
-    const res = await fetch(githubJsonUrl);
-    if (res.ok) {
-        const data = await res.json();
-        const fileId = data[episodeNumber];
-        if (fileId) {
-            let directHlsLink;
-
-            // ✅ If fileId ends with m3u8, use it directly
-            if (fileId.endsWith(".m3u8")) {
-                directHlsLink = fileId;
-				episodeUrl = `https://watchout-player.netlify.app/?url=${encodeURIComponent(directHlsLink)}`;
-            } else {
-				episodeUrl = fileId;
-            }
-            isHlsWorkerLink = true;
-            console.log(`✅ Found episode ${episodeNumber}: ${episodeUrl}`);
-        }
-    }
-} catch (error) {
-    console.error("Error fetching HLS JSON:", error);
-}
-
-
-    // -----------------------------------
-    // 2️⃣ Fallback to RPM Worker if needed
-    // -----------------------------------
-    if (!episodeUrl) {
-        const rpmWorkerApiUrl = `${RPM_WORKER_BASE_URL}?title=${encodeURIComponent(dottedTitle)}`;
         try {
-            const rpmRes = await fetch(rpmWorkerApiUrl);
-            const rpmData = await rpmRes.json();
-            if (rpmData?.result?.files?.length > 0) {
-               const expectedStart = dottedTitle.toLowerCase();
-               const matchedFile = rpmData.result.files.find(file =>
-                   file.title?.toLowerCase().startsWith(expectedStart)
-               );
+            const res = await fetch(githubJsonUrl);
+            if (res.ok) {
+                const data = await res.json();
+                const fileId = data[episodeNumber];
+                if (fileId) {
+                    let directHlsLink;
 
-                if (matchedFile?.file_code) {
-                   const fileCode = matchedFile.file_code;
-                   const playerBaseUrl = await getRegionBasedPlayerBaseUrl();
-                   episodeUrl = `${playerBaseUrl}/#${fileCode}&api=all`;
-                   isHlsWorkerLink = false;
-                   console.log(`✅ RPM startsWith match: ${matchedFile.title}`);
-                } else {
-                     console.warn(`⚠ No RPM file starting with "${dottedTitle}"`);
+                    // ✅ If fileId ends with m3u8, use it directly
+                    if (fileId.endsWith(".m3u8")) {
+                        directHlsLink = fileId;
+                        episodeUrl = `https://watchout-player.netlify.app/?url=${encodeURIComponent(directHlsLink)}`;
+                    } else {
+                        episodeUrl = fileId;
+                    }
+                    isHlsWorkerLink = true;
+                    isGitHubSource = true; // Mark as GitHub source
+                    console.log(`✅ Found episode ${episodeNumber}: ${episodeUrl}`);
                 }
             }
         } catch (error) {
-            console.error(`Error fetching HLS for "${seriesName} ${formattedSeason}${formattedEpisode}":`, error);
+            console.error("Error fetching HLS JSON:", error);
+        }
+
+        // -----------------------------------
+        // 2️⃣ Fallback to RPM Worker if needed
+        // -----------------------------------
+        if (!episodeUrl) {
+            const rpmWorkerApiUrl = `${RPM_WORKER_BASE_URL}?title=${encodeURIComponent(dottedTitle)}`;
+            try {
+                const rpmRes = await fetch(rpmWorkerApiUrl);
+                const rpmData = await rpmRes.json();
+                if (rpmData?.result?.files?.length > 0) {
+                   const expectedStart = dottedTitle.toLowerCase();
+                   const matchedFile = rpmData.result.files.find(file =>
+                       file.title?.toLowerCase().startsWith(expectedStart)
+                   );
+
+                    if (matchedFile?.file_code) {
+                       const fileCode = matchedFile.file_code;
+                       const playerBaseUrl = await getRegionBasedPlayerBaseUrl();
+                       episodeUrl = `${playerBaseUrl}/#${fileCode}&api=all`;
+                       isHlsWorkerLink = false;
+                       isGitHubSource = false; // Explicitly mark as non-GitHub
+                       console.log(`✅ RPM startsWith match: ${matchedFile.title}`);
+                    } else {
+                         console.warn(`⚠ No RPM file starting with "${dottedTitle}"`);
+                    }
+                }
+            } catch (error) {
+                console.error(`Error fetching HLS for "${seriesName} ${formattedSeason}${formattedEpisode}":`, error);
+            }
         }
     }
-}
 
     // -------------------------------------
     // 3️⃣ Final Fallback: Videasy (if needed)
@@ -8526,9 +8529,9 @@ try {
     if (!episodeUrl && seriesId !== undefined) {
         episodeUrl = `https://player.videasy.net/tv/${seriesId}/${seasonNumber}/${episodeNumber}`;
         isHlsWorkerLink = true;
+        isGitHubSource = false; // Videasy is not GitHub
         console.log(`⚠️ Using fallback Videasy link for TMDB ID ${seriesId} S${seasonNumber}E${episodeNumber}: ${episodeUrl}`);
     }
-
 
     if (episodeUrl) {
         modal.dataset.currentBackdrop = document.getElementById('modal-backdrop')?.src || '';
@@ -8540,24 +8543,43 @@ try {
 
         if (!isDesktop) {
          // Mobile → put iframe inside playerWrap
-         playerWrap.innerHTML = `
+         let mobileHTML = `
            <iframe ${iframeAttributes}></iframe>
-           <a class="player-close" onclick="history.back()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24" width="24" height="24" data-icon="XStandard" aria-hidden="true">
+         `;
+         
+         // Only add close button if NOT GitHub source
+         if (!isGitHubSource) {
+             mobileHTML += `
+               <a class="player-close" onclick="history.back()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24" width="24" height="24" data-icon="XStandard" aria-hidden="true">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5858 12L2.29291 3.70706L3.70712 2.29285L12 10.5857L20.2929 2.29285L21.7071 3.70706L13.4142 12L21.7071 20.2928L20.2929 21.7071L12 13.4142L3.70712 21.7071L2.29291 20.2928L10.5858 12Z" fill="currentColor"></path>
 
 </svg></a>
-         `;
+             `;
+         }
+         
+         playerWrap.innerHTML = mobileHTML;
        } else {
          // Desktop → put iframe inside iframe-holder
-         const iframeHolder = document.getElementById("iframe-holder"); // or querySelector
+         const iframeHolder = document.getElementById("iframe-holder");
          if (iframeHolder) {
-           iframeHolder.innerHTML = `
+           let desktopHTML = `
              <iframe ${iframeAttributes}></iframe>
-             <a class="player-close" onclick="playerClose()"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="30" height="30" data-icon="ArrowLeftMedium" data-icon-id=":r0:" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" role="img"><path fill="#FFFFFF" fill-rule="evenodd" d="M6.414 11H21v2H6.414l5.293 5.293-1.414 1.414-7-7a1 1 0 0 1 0-1.414l7-7 1.414 1.414z" clip-rule="evenodd"></path></svg></a>
-    <button id="next-button" class="next-button" onclick="playEpisode('${seriesName}', ${seasonNumber}, ${episodeNumber + 1}, '${seriesId}', '${uniqueEpisodeId}', '${releaseYear}')">
-    ▶ Next Episode
-    </button>
            `;
+           
+           // Only add close button if NOT GitHub source
+           if (!isGitHubSource) {
+               desktopHTML += `
+                 <a class="player-close" onclick="playerClose()"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="30" height="30" data-icon="ArrowLeftMedium" data-icon-id=":r0:" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" role="img"><path fill="#FFFFFF" fill-rule="evenodd" d="M6.414 11H21v2H6.414l5.293 5.293-1.414 1.414-7-7a1 1 0 0 1 0-1.414l7-7 1.414 1.414z" clip-rule="evenodd"></path></svg></a>
+               `;
+           }
+           
+           desktopHTML += `
+             <button id="next-button" class="next-button" onclick="playEpisode('${seriesName}', ${seasonNumber}, ${episodeNumber + 1}, '${seriesId}', '${uniqueEpisodeId}', '${releaseYear}')">
+             ▶ Next Episode
+             </button>
+           `;
+           
+           iframeHolder.innerHTML = desktopHTML;
          } else {
           console.error("iframe-holder element not found in the DOM");
            playerWrap.innerHTML = `
@@ -8584,7 +8606,6 @@ try {
         console.error(`No play URL found for TV episode TMDB ID ${seriesId} S${seasonNumber}E${episodeNumber}.`);
     }
 }
-
 function closeModal() {
     if (window.progressInterval) {
         clearInterval(window.progressInterval);
