@@ -7200,6 +7200,8 @@ async function openModal(id, mediaType) {
     }
   
     overlay.style.display ='block';
+	iframeContainer.innerHTML= '';
+	iframeContainer.style.display = 'none';
     modal.style.visibility ='visible';
     modal.style.transform ='translateY(0)';
 	if (window.innerWidth < 900) { modal.style.transform = 'translateX(0)'; }
