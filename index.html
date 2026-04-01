@@ -8500,7 +8500,7 @@ async function playEpisode(seriesName, seasonNumber, episodeNumber, seriesId, un
                     // ✅ If fileId ends with m3u8, use it directly
                     if (fileId.endsWith(".m3u8") || fileId.endsWith(".txt")) {
                         directHlsLink = fileId;
-                        episodeUrl = `https://watchout-player.netlify.app/tv/${seasonNumber}/${episodeNumber}`;
+                        episodeUrl = `https://watchout-player.netlify.app/tv/S${seasonNumber}/E${episodeNumber}`;
                     } else {
                         episodeUrl = fileId;
                     }
