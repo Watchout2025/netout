@@ -8087,12 +8087,26 @@ if (item.recommendations && item.recommendations.results && item.recommendations
 
                 const iframeHolder = document.getElementById('iframe-holder');
 
-                if (source === "github" || isDesktop) {
-                    // GitHub (watchout-player) on mobile → iframe-holder
-                    // All sources on desktop → iframe-holder
+                if (source === "github") {
+                    // GitHub → iframe-holder, no close button
                     if (iframeHolder) {
                         iframeHolder.style.display = "block";
                         iframeHolder.innerHTML = `<iframe ${iframeAttributes}></iframe>`;
+                    } else {
+                        console.error("iframe-holder element not found in the DOM");
+                    }
+                } else if (isDesktop) {
+                    // RPM / Videasy on desktop → iframe-holder WITH close button
+                    if (iframeHolder) {
+                        iframeHolder.style.display = "block";
+                        iframeHolder.innerHTML = `
+                            <iframe ${iframeAttributes}></iframe>
+                            <a class="player-close" onclick="history.back()">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5858 12L2.29291 3.70706L3.70712 2.29285L12 10.5857L20.2929 2.29285L21.7071 3.70706L13.4142 12L21.7071 20.2928L20.2929 21.7071L12 13.4142L3.70712 21.7071L2.29291 20.2928L10.5858 12Z" fill="currentColor"></path>
+                                </svg>
+                            </a>
+                        `;
                     } else {
                         console.error("iframe-holder element not found in the DOM");
                     }
@@ -8514,11 +8528,30 @@ async function playEpisode(seriesName, seasonNumber, episodeNumber, seriesId, un
         modal.dataset.currentBackdrop = document.getElementById('modal-backdrop')?.src || '';
         const iframeAttributes = `id="movie-player-iframe" src="${episodeUrl}" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="aspect-ratio: 16/9;"`;
 
-        if (isGitHubSource || isDesktop) {
+        if (isGitHubSource) {
+            // GitHub → iframe-holder, no close button
             const iframeHolder = document.getElementById("iframe-holder");
             if (iframeHolder) {
                 let playerHTML = `<iframe ${iframeAttributes}></iframe>`;
                 playerHTML += `
+                  <button id="next-button" class="next-button" onclick="playEpisode('${seriesName}', ${seasonNumber}, ${episodeNumber + 1}, '${seriesId}', '${uniqueEpisodeId}', '${releaseYear}')">
+                  ▶ Next Episode
+                  </button>
+                `;
+                iframeHolder.style.display = "block";
+                iframeHolder.innerHTML = playerHTML;
+            } else {
+                console.error("iframe-holder element not found in the DOM");
+            }
+        } else if (isDesktop) {
+            // RPM / Videasy on desktop → iframe-holder WITH close button
+            const iframeHolder = document.getElementById("iframe-holder");
+            if (iframeHolder) {
+                let playerHTML = `<iframe ${iframeAttributes}></iframe>`;
+                playerHTML += `
+                  <a class="player-close" onclick="history.back()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5858 12L2.29291 3.70706L3.70712 2.29285L12 10.5857L20.2929 2.29285L21.7071 3.70706L13.4142 12L21.7071 20.2928L20.2929 21.7071L12 13.4142L3.70712 21.7071L2.29291 20.2928L10.5858 12Z" fill="currentColor"></path>
+                  </svg></a>
                   <button id="next-button" class="next-button" onclick="playEpisode('${seriesName}', ${seasonNumber}, ${episodeNumber + 1}, '${seriesId}', '${uniqueEpisodeId}', '${releaseYear}')">
                   ▶ Next Episode
                   </button>
