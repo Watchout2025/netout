@@ -202,6 +202,16 @@ document.addEventListener('click', (event) => {
   
 <!-- Add your custom styles here -->
 <style>
+	@media (max-width: 500px) {
+    .iframe-holder {
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center;
+        width: 100vh;
+        height: 100vw;
+        top: 50%;
+        left: 50%;
+    }
+}
 	@media (max-width:768px){
   #header-logo-img{
 	height: 40px !important;
