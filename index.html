@@ -48,17 +48,28 @@
 
   <!-- Firebase SDKs -->
     <script type="module">
-		async function requestPortrait() {
+		// This function MUST be called by a button click
+async function startAppInPortrait() {
   try {
-    // Some browsers require entering fullscreen before locking
-    await document.documentElement.requestFullscreen();
-    await screen.orientation.lock("portrait");
+    const elem = document.documentElement;
+
+    // 1. Enter Fullscreen (Mandatory for orientation lock)
+    if (elem.requestFullscreen) {
+      await elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* iOS/Safari check */
+      await elem.webkitRequestFullscreen();
+    }
+
+    // 2. Lock Orientation
+    if (screen.orientation && screen.orientation.lock) {
+      await screen.orientation.lock("portrait");
+      console.log("Success: Locked to portrait!");
+    }
   } catch (err) {
-    console.error("Orientation lock failed:", err);
+    // If user denies fullscreen, orientation lock will fail here
+    console.error("Failed to lock:", err.name, err.message);
   }
 }
-		requestPortrait();
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
         
