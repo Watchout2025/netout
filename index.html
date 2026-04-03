@@ -8177,7 +8177,8 @@ if (item.recommendations && item.recommendations.results && item.recommendations
 
 		else if (mediaType === 'tv') {
 			channelSection.style.display = 'none';	
-            const validSeasons = item.seasons ? item.seasons.filter(s => s.season_number >= 1) : [];
+            // Filter out season 0 (specials) AND upcoming/empty seasons with fewer than 2 episodes
+            const validSeasons = item.seasons ? item.seasons.filter(s => s.season_number >= 1 && s.episode_count >= 2) : [];
 
             if (validSeasons.length > 0) {
                 playBtn.style.display = 'flex';
@@ -8239,9 +8240,12 @@ if (item.recommendations && item.recommendations.results && item.recommendations
                 };
 
                 if (seasonSelector.options.length > 0) {
-                    const latestValidSeasonNumber = validSeasons[validSeasons.length - 1].season_number;
-                    seasonSelector.value = latestValidSeasonNumber;
-                    await fetchEpisodes(id, latestValidSeasonNumber, item.name, releaseYear);
+                    // Prefer the user's last watched season; fall back to the latest available season
+                    const lastValidSeasonNumber = validSeasons[validSeasons.length - 1].season_number;
+                    const watchedSeasonExists = latestWatched && validSeasons.some(s => s.season_number === latestWatched.season);
+                    const preselectedSeason = watchedSeasonExists ? latestWatched.season : lastValidSeasonNumber;
+                    seasonSelector.value = preselectedSeason;
+                    await fetchEpisodes(id, preselectedSeason, item.name, releaseYear);
                }
 
             } else {
