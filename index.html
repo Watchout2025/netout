@@ -6929,12 +6929,9 @@ function displayProgressBar(targetElement, progress) {
 }
 
 window.addEventListener('message', (event) => {
-    // ⚠️ CRITICAL: In a production environment, always verify the origin.
-    // e.g., if (event.origin !== 'https://your-player-domain.com') return;
-
+    if (event.origin !== 'https://watchout-player.netlify.app') return;
     const data = event.data;
     if (!data || data.event !== 'videoTimeUpdate') return;
-
     // Build uniqueContentId from the message itself — no need to track separately
     let uniqueContentId;
     if (data.mediaType === 'tv') {
