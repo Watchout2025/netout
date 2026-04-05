@@ -6948,64 +6948,35 @@ function setupPlayerListener(uniqueContentId) {
     const playerIframe = document.getElementById('movie-player-iframe');
     if (!playerIframe) return;
 
-    // Get the origin of the currently loaded iframe
     const playerOrigin = new URL(playerIframe.src).origin;
-    
-    // Determine the type of player based on the origin or other data
-    const isRpmPlayer = playerOrigin.includes('rpm');
-    const isWatchoutPlayer = (playerOrigin === window.location.origin) || playerOrigin.includes('watchout'); // Adjust 'watchout' if your domain is different
 
     const messageHandler = function(event) {
-        // --- Security Check ---
-        // Only proceed if the message is from the expected iframe origin
+        // Security check
         if (event.origin !== playerOrigin) return;
-        
-        // --- 1. RPM Player Logic (Polling based on 'Ready' status) ---
-        if (isRpmPlayer) {
-            if (event.data.playerStatus === 'Ready') {
-                // Clear any existing interval to prevent duplication
-                if (window.progressInterval) {
-                    clearInterval(window.progressInterval);
-                }
-                
-                // Start polling the RPM player for time every 5 seconds
-                window.progressInterval = setInterval(() => {
-                    playerIframe.contentWindow.postMessage({
-                        command: 'getTime'
-                    }, playerOrigin);
-                }, 5000);
+
+        // RPM Player Logic
+        if (event.data.playerStatus === 'Ready') {
+            if (window.progressInterval) {
+                clearInterval(window.progressInterval);
             }
 
-            // Handle the time response (from polling)
-            if (event.data.currentTime !== undefined && event.data.duration !== undefined) {
-                saveVideoProgress(uniqueContentId, event.data.currentTime, event.data.duration);
-            }
-        } 
-        
-        // --- 2. Watchout Player Logic (Automatic timeupdate postMessage) ---
-        else if (isWatchoutPlayer) {
-            // Watchout player sends an automatic message on timeupdate
-            if (event.data.event === 'videoTimeUpdate') {
-                 // The HLS player broadcasts its time automatically, 
-                 // no need for the 'Ready' status or polling interval.
-                 
-                 const currentTime = event.data.currentTime;
-                 const duration = event.data.duration;
-                 
-                 // Save the progress
-                 if (currentTime !== undefined && duration !== undefined) {
-                     saveVideoProgress(uniqueContentId, currentTime, duration);
-                 }
-            }
+            window.progressInterval = setInterval(() => {
+                playerIframe.contentWindow.postMessage({
+                    command: 'getTime'
+                }, playerOrigin);
+            }, 5000);
         }
-        
-    }; // End of messageHandler
 
-    // Remove previous handler if exists to avoid duplication
+        // Handle time response
+        if (event.data.currentTime !== undefined && event.data.duration !== undefined) {
+            saveVideoProgress(uniqueContentId, event.data.currentTime, event.data.duration);
+        }
+    };
+
     if (window.currentMessageHandler) {
         window.removeEventListener('message', window.currentMessageHandler);
         if (window.progressInterval) {
-            clearInterval(window.progressInterval); // Clear the polling interval
+            clearInterval(window.progressInterval);
         }
     }
 
