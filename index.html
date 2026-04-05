@@ -7177,6 +7177,7 @@ async function getMovieStreamingAndDownloadLink(movieItem, movieReleaseYear) {
 
 // openModal Script
 async function openModal(id, mediaType) {
+	const searchPage = document.getElementById("search-page");
 	const headerTitle = document.getElementById("header-title");
 	const headerLogo = document.getElementById("headerLogo");
 	const backButton = document.getElementById("backButton");
@@ -7334,6 +7335,7 @@ fill="currentColor"></path>
     
     } else {
         // Mobile
+	    searchPage.style.z-index = '9999';
 		headerTitle.style.display = 'none';
 	    headerLogo.style.display = 'none';
 		backButton.style.display = 'block';
@@ -9662,6 +9664,7 @@ window.addEventListener('popstate', (event) => {
   } else {
     // otherwise, remove the “is-visible” class
     searchPage.classList.remove('is-visible');
+	searchPage.style.z-index = '999999';
     searchInputBar.blur();
   }
 });
