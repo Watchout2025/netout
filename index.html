@@ -2218,7 +2218,7 @@ h4{font-size:21px;line-height:26px}
         <header class="header">
           <div class="header-left" style="display: flex; align-items: center; gap: 0.5rem; padding-left: 4%;" bis_skin_checked="1">
                 <!-- Updated Netflix Logo - inline style removed, CSS class handles height -->
-                <a href="/" style="display: flex;align-items: flex-start;">
+                <a id="headerLogo" href="/" style="display: flex;align-items: flex-start;">
 					<img id="header-logo-img" src="/icons/header-logo.png" style="height: 25px;">
                 </a>
 			    <!-- Back Button  -->
@@ -7168,6 +7168,8 @@ async function getMovieStreamingAndDownloadLink(movieItem, movieReleaseYear) {
 
 // openModal Script
 async function openModal(id, mediaType) {
+	const headerTitle = document.getElementById("header-title");
+	const headerLogo = document.getElementById("headerLogo");
 	const backButton = document.getElementById("backButton");
 	const badge = document.getElementById("top-10-badge");
 	const text = document.getElementById("top-10-text");
@@ -7323,6 +7325,8 @@ fill="currentColor"></path>
     
     } else {
         // Mobile
+		headerTitle.style.display = 'none';
+	    headerLogo.style.display = 'none';
 		backButton.style.display = 'block';
         document.querySelectorAll('.play-button2').forEach(btn => btn.remove());
         document.querySelectorAll('.myList2').forEach(btn => btn.remove());
