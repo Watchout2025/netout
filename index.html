@@ -6954,7 +6954,8 @@ function setupPlayerListener(uniqueContentId) {
 
     const messageHandler = function(event) {
         // Security check
-        if (event.origin !== playerOrigin) return;
+        const data = event.data;
+        if (data.event == 'videoTimeUpdate') return;
 
         // RPM Player Logic
         if (event.data.playerStatus === 'Ready') {
