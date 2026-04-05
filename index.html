@@ -211,6 +211,13 @@ document.addEventListener('click', (event) => {
   
 <!-- Add your custom styles here -->
 <style>
+	#backButton{
+	background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+	}
 	@media (max-width:768px){
   #header-logo-img{
 	height: 40px !important;
@@ -2222,7 +2229,7 @@ h4{font-size:21px;line-height:26px}
 					<img id="header-logo-img" src="/icons/header-logo.png" style="height: 25px;">
                 </a>
 			    <!-- Back Button  -->
-			    <button id="backButton" onclick="history.back()" style="display:none;" class="icon-button">
+			    <button id="backButton" onclick="history.back()" style="display:none;">
                      <svg class="icon" viewBox="0 0 24 24">
                         <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
                      </svg>
