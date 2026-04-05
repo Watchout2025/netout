@@ -211,15 +211,6 @@ document.addEventListener('click', (event) => {
   
 <!-- Add your custom styles here -->
 <style>
-	#backButton{
-	z-index: 9999;
-	padding:0;
-	background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-	}
 	@media (max-width:768px){
   #header-logo-img{
 	height: 40px !important;
@@ -2227,15 +2218,9 @@ h4{font-size:21px;line-height:26px}
         <header class="header">
           <div class="header-left" style="display: flex; align-items: center; gap: 0.5rem; padding-left: 4%;" bis_skin_checked="1">
                 <!-- Updated Netflix Logo - inline style removed, CSS class handles height -->
-                <a id="headerLogo" href="/" style="display: flex;align-items: flex-start;">
+                <a href="/" style="display: flex;align-items: flex-start;">
 					<img id="header-logo-img" src="/icons/header-logo.png" style="height: 25px;">
                 </a>
-			    <!-- Back Button  -->
-			    <button id="backButton" onclick="history.back()" style="display:none;">
-                     <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
-                     </svg>
-                </button>
                 <span class="header-title" id="header-title"></span> <!-- Changed to empty text content -->
                 <nav id="header-nav-links" class="header-nav-links">
                     <a  class="header-nav-link" onclick="renderHomeSections()">Home</a>
@@ -3265,7 +3250,6 @@ body{background: #141414;}
         background: #000;
         }
 		.tmdb-modal{
-		margin-top: 60px;
 		background: #000 !important;
 		transform: translateX(100%);
 		}
@@ -3950,8 +3934,7 @@ toggleBtn.addEventListener('click', () => {
     if (window.innerWidth <= 1000) {
         // Mobile / tablet
         searchPage.classList.add('is-visible');
-		searchPage.style.display ='block';        
-		searchInputBar.focus();
+        searchInputBar.focus();
 
         if (window.location.pathname !== '/search') {
             history.pushState({}, '', '/search');
@@ -6218,6 +6201,12 @@ searchInputBar.addEventListener("input", () => {
             <a class="player-close" onclick="closePlayer()"><svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" width="24" height="24" data-icon="ArrowLeftMedium" data-icon-id=":r0:" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" role="img"><path fill="#FFFFFF" fill-rule="evenodd" d="M6.414 11H21v2H6.414l5.293 5.293-1.414 1.414-7-7a1 1 0 0 1 0-1.414l7-7 1.414 1.414z" clip-rule="evenodd"></path></svg></a>
         </div>
     <div id="tmdb-modal" style="visibility: hidden;" class="tmdb-modal">
+      <button onclick="history.back()" style="margin-bottom:10px" class="icon-button">
+                <!-- Back/Close Arrow SVG -->
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+                </svg>
+      </button>
 	    <section id="channel-content" class="channel-content" style="display:none;">
 			<div id="tv-player-div">
 			</div>
@@ -7178,10 +7167,6 @@ async function getMovieStreamingAndDownloadLink(movieItem, movieReleaseYear) {
 
 // openModal Script
 async function openModal(id, mediaType) {
-	const searchPage = document.getElementById("search-page");
-	const headerTitle = document.getElementById("header-title");
-	const headerLogo = document.getElementById("headerLogo");
-	const backButton = document.getElementById("backButton");
 	const badge = document.getElementById("top-10-badge");
 	const text = document.getElementById("top-10-text");
     const modal = document.getElementById('tmdb-modal');
@@ -7231,7 +7216,6 @@ async function openModal(id, mediaType) {
     }
   
     overlay.style.display ='block';
-	searchPage.style.display ='none';
 	iframeContainer.innerHTML= '';
 	iframeContainer.style.display = 'none';
     modal.style.visibility ='visible';
@@ -7337,9 +7321,6 @@ fill="currentColor"></path>
     
     } else {
         // Mobile
-		headerTitle.style.display = 'none';
-	    headerLogo.style.display = 'none';
-		backButton.style.display = 'block';
         document.querySelectorAll('.play-button2').forEach(btn => btn.remove());
         document.querySelectorAll('.myList2').forEach(btn => btn.remove());
         document.querySelectorAll('.previewModal-logo-con').forEach(btn => btn.remove());
