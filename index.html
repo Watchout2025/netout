@@ -10085,6 +10085,7 @@ checkUrlAndOpenModal(true);
 
 function handleRoute() {
   const path = location.pathname.toLowerCase();
+  document.querySelector('link[rel="canonical"]').setAttribute('href', window.location.href);
 
   if (path === "/movies") {
     renderMovieSections();
