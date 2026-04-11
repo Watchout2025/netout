@@ -4574,7 +4574,7 @@ displayContinueWatching();
     };
 
     // TMDB API details via a proxy to avoid CORS issues
-    const PROXY_BASE = 'https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev';
+    const PROXY_BASE = 'https://tmdb-proxy.idolupdates.workers.dev';
     const TRENDING_API_URL = `${PROXY_BASE}/?url=trending/movie/week`;
     const DETAILS_API_URL = (id) => `${PROXY_BASE}/?url=movie/${id}`;
     
@@ -4694,7 +4694,7 @@ displayContinueWatching();
 	const top10TV = {};
     const TRENDING_TV_CONTAINER = document.getElementById('trending-tv-shows');
     const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w300';
-    const PROXY_URL = 'https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev/?url=trending/tv/week';
+    const PROXY_URL = 'https://tmdb-proxy.idolupdates.workers.dev/?url=trending/tv/week';
 
     async function fetchTrendingTVShows() {
         try {
@@ -5850,7 +5850,7 @@ const searchInputBar = document.getElementById('search-input');
 let trendingCache = null;
 
 // --- API Configuration ---
-const PROXY_BASEURL = 'https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev';
+const PROXY_BASEURL = 'https://tmdb-proxy.idolupdates.workers.dev';
 // Fetch movies + TV shows
 const trendingResults = `${PROXY_BASEURL}/?url=trending/all/week`;
 
@@ -6517,7 +6517,7 @@ function renderTVSections(genre) {
 
   // ── Random top-10 trending TV spotlight ──
   (async () => {
-    const PROXY      = 'https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev';
+    const PROXY      = 'https://tmdb-proxy.idolupdates.workers.dev';
     const IMAGE_BASE = 'https://image.tmdb.org/t/p/original';
     try {
       const res  = await fetch(`${PROXY}/?url=trending/tv/week`);
@@ -6582,7 +6582,7 @@ function renderMovieSections(genre) {
 
   // ── Random top-10 trending Movies spotlight ──
   (async () => {
-    const PROXY      = 'https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev';
+    const PROXY      = 'https://tmdb-proxy.idolupdates.workers.dev';
     const IMAGE_BASE = 'https://image.tmdb.org/t/p/original';
     try {
       const res  = await fetch(`${PROXY}/?url=trending/movie/week`);
@@ -6683,7 +6683,7 @@ function renderHomeSections() {
 
   // ── Random top-10 trending (all/week) spotlight ──
   (async () => {
-    const PROXY      = 'https://workers-playground-autumn-mouse-86e7.watchoutofficial2006.workers.dev';
+    const PROXY      = 'https://tmdb-proxy.idolupdates.workers.dev';
     const IMAGE_BASE = 'https://image.tmdb.org/t/p/original';
     try {
       const res  = await fetch(`${PROXY}/?url=trending/all/week`);
